@@ -1,21 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { ChangeEvent, useState } from 'react';
 import './App.css';
 
 function App() {
 
-  const [counter, setCounter] = React.useState(0)
-  const [start, setStart] = React.useState(0);
-  const [maxValue, setMaxValue] = React.useState(0);
+  const [counter, setCounter] = useState(0)
+  const [minValue, setMinValue] = useState(0);
+  const [maxValue, setMaxValue] = useState(10);
+  const [error, setError] = useState('');
 
-  let val: any;
-  const startWith = (start: any) => {
-    val = start;
-  }
+  //inputs
+  const [maxValueInput, setMaxValueInput] = useState(10);
+  const [minValueInput, setMinValueInput] = useState(0);
 
-  const startWithButton = () => {
-    setStart(val)
-    setCounter(val)
+
+
+  const setMinMaxValues = () => {
+    setMaxValue(maxValueInput)
+    setMinValue(minValueInput)
+    setCounter(minValue)
   }
 
   const inc = () => {
@@ -23,41 +25,37 @@ function App() {
   }
 
   const reset = () => {
-    setCounter(0)
+    setCounter(minValue)
   }
 
-  let stop: boolean = false;
-
-  if (counter === maxValue) {
-    stop = true;
-  }
-
-  const check = (val: any): boolean => {
-    if (val === maxValue) {
-      return true
+  // Сделать error: убрать ошику когда исправил, добавить ошибку maxinput === mininput, red text when error
+  // validation 
+  const minValueHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = +e.currentTarget.value;
+    if (value === maxValueInput) {
+      setError('Error: do not =')
     }
-    return false
+    setMinValueInput(+e.currentTarget.value);
   }
+
 
   return (
     <div className="App">
       <div className='one_box'>
         <div className='values'>
-          <h2>MAX VALUE: {maxValue}</h2>
-          <input className='superInput' type="text" onChange={({ target }) => setMaxValue(parseInt(target.value))} />
-          <h2>START VALUE: {start}</h2>
-          <input className='superInput' type="text" onChange={({ target }) => startWith(parseInt(target.value))} />
+          <input className='superInput' type="text" value={minValueInput} onChange={minValueHandleChange} />
+          <input className='superInput' type="text" value={maxValueInput} onChange={(e) => setMaxValueInput(+e.currentTarget.value)} />
         </div>
         <div>
-          <button onClick={startWithButton}>SET</button>
+          <button disabled={!!error} onClick={setMinMaxValues}>SET</button>
         </div>
       </div>
       <div className='two-box'>
         <div className='values'>
-          <h1>{counter}</h1>
+          <h1>{error ? error : counter}</h1>
         </div>
         <div>
-          <button disabled={check(counter)} onClick={inc}>INC</button>
+          <button disabled={counter === maxValue} onClick={inc}>INC</button>
           <button onClick={reset}>RESET</button>
         </div>
       </div>
