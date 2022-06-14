@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
+import {motion} from 'framer-motion'
 import './App.css';
 
 function App() {
@@ -38,25 +39,63 @@ function App() {
     setMinValueInput(+e.currentTarget.value);
   }
 
+  const btnStyle = {
+    listStyle: 'none',
+    outline: 'none',
+    border: 'none',
+    backgroundColor: "#ddd",
+    cursor: 'pointer',
+    marginLeft: '10px',
+    marginTop: '10px',
+    padding: '15px'
+  }
+
 
   return (
     <div className="App">
-      <div className='one_box'>
+      <motion.div
+      initial={false}
+      className='one_box'>
         <div className='values'>
-          <input className='superInput' type="text" value={minValueInput} onChange={minValueHandleChange} />
-          <input className='superInput' type="text" value={maxValueInput} onChange={(e) => setMaxValueInput(+e.currentTarget.value)} />
+          <div className='superInputWrapper'>
+            <input className='superInput' type="text" value={minValueInput} onChange={minValueHandleChange} />
+          </div>
+          <div className='superInputWrapper'>
+            <input className='superInput' type="text" value={maxValueInput} onChange={(e) => setMaxValueInput(+e.currentTarget.value)} />
+          </div>
         </div>
         <div>
-          <button disabled={!!error} onClick={setMinMaxValues}>SET</button>
+          <motion.button
+            whileHover={{scale: 1.1}}
+            whileTap={{scale: 0.9}}
+            style={btnStyle}
+            disabled={!!error}
+            onClick={setMinMaxValues}>
+              SET
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
       <div className='two-box'>
-        <div className='values'>
+        <motion.div
+          animate={{scale: 0.5}}
+        className='values'>
           <h1>{error ? error : counter}</h1>
-        </div>
+        </motion.div>
         <div>
-          <button disabled={counter === maxValue} onClick={inc}>INC</button>
-          <button onClick={reset}>RESET</button>
+          <motion.button
+            whileHover={{scale: 1.1}}
+            whileTap={{scale: 0.9}}
+            style={btnStyle}
+            disabled={counter === maxValue}
+            onClick={inc}>
+              INC
+          </motion.button>
+          <motion.button
+            whileHover={{scale: 1.1}}
+            style={btnStyle}
+            onClick={reset}>
+              RESET
+          </motion.button>
         </div>
       </div>
     </div>
